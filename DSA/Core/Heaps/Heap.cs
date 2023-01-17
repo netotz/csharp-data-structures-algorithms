@@ -8,13 +8,18 @@ public abstract class Heap<T> where T : INumber<T>
 
     public int Size => _list.Count;
 
+    public bool IsEmpty => Size == 0;
+
+    public Heap()
+    {
+        _list = new List<T>();
+    }
+
     public Heap(ICollection<T> values)
     {
         _list = values.ToList();
         Build();
     }
-
-    protected abstract bool HasPriority(T value1, T value2);
 
     private void Build()
     {
@@ -100,13 +105,21 @@ public abstract class Heap<T> where T : INumber<T>
         }
     }
 
+    protected abstract bool HasPriority(T value1, T value2);
+
     public T Peek()
     {
+        if (IsEmpty)
+            throw new InvalidOperationException("Cannot peek an empty heap.");
+
         return _list[0];
     }
 
     public T Pop()
     {
+        if (IsEmpty)
+            throw new InvalidOperationException("Cannot pop from an empty heap.");
+
         var root = Peek();
 
         // swap with last
