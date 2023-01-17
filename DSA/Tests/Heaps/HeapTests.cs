@@ -1,5 +1,6 @@
+using DSA.Core.Heaps;
 
-using DSA.Core;
+namespace DSA.Tests.Heaps;
 
 public class HeapTests
 {

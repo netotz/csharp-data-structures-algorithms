@@ -1,6 +1,6 @@
 using System.Numerics;
 
-namespace DSA.Core;
+namespace DSA.Core.Heaps;
 
 public class MaxHeap<T> : Heap<T> where T : INumber<T>
 {

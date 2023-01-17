@@ -1,6 +1,6 @@
 using System.Numerics;
 
-namespace DSA.Core;
+namespace DSA.Core.Heaps;
 
 public abstract class Heap<T> where T : INumber<T>
 {
