@@ -1,4 +1,3 @@
-using System.Diagnostics;
 using System.Numerics;
 
 namespace DSA.Core;
@@ -68,18 +67,15 @@ public abstract class Heap<T> where T : INumber<T>
                 break;
             }
 
-            if (!hasRightChild)
-            {
-                Swap(i, l);
-                i = l;
-                continue;
-            }
-
-            if (HasPriority(rightChild!, leftChild))
+            if (hasRightChild && HasPriority(rightChild!, leftChild))
             {
                 Swap(i, r);
                 i = r;
-                continue;
+            }
+            else
+            {
+                Swap(i, l);
+                i = l;
             }
         }
     }
