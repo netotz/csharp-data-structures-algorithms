@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using System.Numerics;
 
 namespace DSA.Core;
@@ -8,9 +9,9 @@ public abstract class Heap<T> where T : INumber<T>
 
     public int Size => _list.Count;
 
-    public Heap(List<T> values)
+    public Heap(ICollection<T> values)
     {
-        _list = values;
+        _list = values.ToList();
         Build();
     }
 
@@ -58,22 +59,27 @@ public abstract class Heap<T> where T : INumber<T>
             var leftChild = _list[l];
 
             var r = GetRightChildIndex(i);
-            var rightChild = _list[r];
+            var hasRightChild = r < Size;
+            var rightChild = hasRightChild ? _list[r] : default;
 
-            if (HasPriority(current, leftChild) && HasPriority(current, rightChild))
+            if ((HasPriority(current, leftChild) && !hasRightChild)
+                || (HasPriority(current, leftChild) && HasPriority(current, rightChild!)))
             {
                 break;
             }
 
-            if (HasPriority(leftChild, rightChild))
+            if (!hasRightChild)
             {
                 Swap(i, l);
                 i = l;
+                continue;
             }
-            else
+
+            if (HasPriority(rightChild!, leftChild))
             {
                 Swap(i, r);
                 i = r;
+                continue;
             }
         }
     }
