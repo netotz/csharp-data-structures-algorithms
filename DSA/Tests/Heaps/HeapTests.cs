@@ -18,6 +18,14 @@ public class HeapTests
         Assert.Equal(root, actual);
     }
 
+    [Fact]
+    public void Peak_EmptyHeap_ThrowsException()
+    {
+        var maxHeap = new MaxHeap<int>();
+
+        Assert.Throws<InvalidOperationException>(() => maxHeap.Peek());
+    }
+
     [Theory]
     [InlineData(new[] { 0, 1 }, 1, 0)]
     [InlineData(new[] { 0, 1, 2 }, 2, 1)]
@@ -32,6 +40,14 @@ public class HeapTests
 
         Assert.Equal(popped, actualPopped);
         Assert.Equal(newRoot, actualPeaked);
+    }
+
+    [Fact]
+    public void Pop_EmptyHeap_ThrowsException()
+    {
+        var maxHeap = new MaxHeap<int>();
+
+        Assert.Throws<InvalidOperationException>(() => maxHeap.Pop());
     }
 
     [Theory]
