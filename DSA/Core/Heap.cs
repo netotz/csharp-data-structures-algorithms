@@ -8,17 +8,21 @@ public abstract class Heap<T> where T : INumber<T>
 
     public int Size => _list.Count;
 
-    protected abstract bool HasPriority(T value1, T value2);
-
     public Heap(List<T> values)
     {
         _list = values;
         Build();
     }
 
+    protected abstract bool HasPriority(T value1, T value2);
+
     private void Build()
     {
-
+        for (var i = (Size / 2) - 1; i >= 0; i--)
+        {
+            // O(log n)
+            HeapifyDown(i);
+        }
     }
 
     private int GetParentIndex(int i)
