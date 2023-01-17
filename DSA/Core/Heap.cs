@@ -107,7 +107,7 @@ public abstract class Heap<T> where T : INumber<T>
 
     public T Pop()
     {
-        var root = _list[0];
+        var root = Peak();
 
         // swap with last
         Swap(0, Size - 1);
