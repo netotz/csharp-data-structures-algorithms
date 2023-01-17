@@ -13,7 +13,7 @@ public class HeapTests
     {
         var maxHeap = new MaxHeap<int>(values);
 
-        var actual = maxHeap.Peak();
+        var actual = maxHeap.Peek();
 
         Assert.Equal(root, actual);
     }
@@ -28,7 +28,7 @@ public class HeapTests
         var maxHeap = new MaxHeap<int>(values);
 
         var actualPopped = maxHeap.Pop();
-        var actualPeaked = maxHeap.Peak();
+        var actualPeaked = maxHeap.Peek();
 
         Assert.Equal(popped, actualPopped);
         Assert.Equal(newRoot, actualPeaked);
@@ -46,7 +46,7 @@ public class HeapTests
 
         maxHeap.Push(newValue);
 
-        var actual = maxHeap.Peak();
+        var actual = maxHeap.Peek();
 
         Assert.Equal(newRoot, actual);
     }

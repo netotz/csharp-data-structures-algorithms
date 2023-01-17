@@ -100,14 +100,14 @@ public abstract class Heap<T> where T : INumber<T>
         }
     }
 
-    public T Peak()
+    public T Peek()
     {
         return _list[0];
     }
 
     public T Pop()
     {
-        var root = Peak();
+        var root = Peek();
 
         // swap with last
         Swap(0, Size - 1);
