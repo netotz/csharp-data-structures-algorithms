@@ -45,6 +45,21 @@ public abstract class Heap<T> where T : INumber<T>
         return (i * 2) + 2;
     }
 
+    private T GetParent(int i)
+    {
+        return _list[GetParentIndex(i)];
+    }
+
+    private T GetLeftChild(int i)
+    {
+        return _list[GetLeftChildIndex(i)];
+    }
+
+    private T GetRightChild(int i)
+    {
+        return _list[GetRightChildIndex(i)];
+    }
+
     private void Swap(int i, int j)
     {
         var temp = _list[i];
@@ -57,49 +72,32 @@ public abstract class Heap<T> where T : INumber<T>
         var i = start;
         while (i < Size / 2)
         {
-            var current = _list[i];
-
             var l = GetLeftChildIndex(i);
             var leftChild = _list[l];
 
             var r = GetRightChildIndex(i);
             var hasRightChild = r < Size;
-            var rightChild = hasRightChild ? _list[r] : default;
 
-            if ((HasPriority(current, leftChild) && !hasRightChild)
-                || (HasPriority(current, leftChild) && HasPriority(current, rightChild!)))
+            var priorityChildIndex = hasRightChild && HasPriority(GetRightChild(i), leftChild) ? r : l;
+            var priorityChild = _list[priorityChildIndex];
+
+            var current = _list[i];
+            if (HasPriority(current, priorityChild))
             {
                 break;
             }
 
-            if (hasRightChild && HasPriority(rightChild!, leftChild))
-            {
-                Swap(i, r);
-                i = r;
-            }
-            else
-            {
-                Swap(i, l);
-                i = l;
-            }
+            Swap(i, priorityChildIndex);
+            i = priorityChildIndex;
         }
     }
 
-    private void HeapifyUp(int start)
+    private void HeapifyUp()
     {
-        var i = start;
-        while (i > 0)
+        var i = Size - 1;
+        while (i > 0 && !HasPriority(GetParent(i), _list[i]))
         {
-            var current = _list[i];
-
             var p = GetParentIndex(i);
-            var parent = _list[p];
-
-            if (HasPriority(parent, current))
-            {
-                break;
-            }
-
             Swap(i, p);
             i = p;
         }
@@ -122,8 +120,8 @@ public abstract class Heap<T> where T : INumber<T>
 
         var root = Peek();
 
-        // swap with last
-        Swap(0, Size - 1);
+        // set last as root
+        _list[0] = _list[Size - 1];
         _list.RemoveAt(Size - 1);
 
         HeapifyDown(0);
@@ -134,6 +132,6 @@ public abstract class Heap<T> where T : INumber<T>
     public void Push(T value)
     {
         _list.Add(value);
-        HeapifyUp(Size - 1);
+        HeapifyUp();
     }
 }
