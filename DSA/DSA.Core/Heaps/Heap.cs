@@ -1,23 +1,24 @@
 using System.Numerics;
+using DSA.Core.ADT;
 
 namespace DSA.Core.Heaps;
 
-public abstract class Heap<T> where T : INumber<T>
+public abstract class Heap<T> : PriorityQueue<T> where T : INumber<T>
 {
-    private readonly List<T> _list;
+    private readonly IList<T> _values;
 
-    public int Size => _list.Count;
+    public int Size => _values.Count;
 
-    public bool IsEmpty => Size == 0;
+    public override bool IsEmpty => Size == 0;
 
     public Heap()
     {
-        _list = new List<T>();
+        _values = new List<T>();
     }
 
     public Heap(ICollection<T> values)
     {
-        _list = values.ToList();
+        _values = values.ToList();
         Build();
     }
 
@@ -47,24 +48,24 @@ public abstract class Heap<T> where T : INumber<T>
 
     private T GetParent(int i)
     {
-        return _list[GetParentIndex(i)];
+        return _values[GetParentIndex(i)];
     }
 
     private T GetLeftChild(int i)
     {
-        return _list[GetLeftChildIndex(i)];
+        return _values[GetLeftChildIndex(i)];
     }
 
     private T GetRightChild(int i)
     {
-        return _list[GetRightChildIndex(i)];
+        return _values[GetRightChildIndex(i)];
     }
 
     private void Swap(int i, int j)
     {
-        var temp = _list[i];
-        _list[i] = _list[j];
-        _list[j] = temp;
+        var temp = _values[i];
+        _values[i] = _values[j];
+        _values[j] = temp;
     }
 
     private void HeapifyDown(int start)
@@ -73,15 +74,15 @@ public abstract class Heap<T> where T : INumber<T>
         while (i < Size / 2)
         {
             var l = GetLeftChildIndex(i);
-            var leftChild = _list[l];
+            var leftChild = _values[l];
 
             var r = GetRightChildIndex(i);
             var hasRightChild = r < Size;
 
             var priorityChildIndex = hasRightChild && HasPriority(GetRightChild(i), leftChild) ? r : l;
-            var priorityChild = _list[priorityChildIndex];
+            var priorityChild = _values[priorityChildIndex];
 
-            var current = _list[i];
+            var current = _values[i];
             if (HasPriority(current, priorityChild))
             {
                 break;
@@ -95,7 +96,7 @@ public abstract class Heap<T> where T : INumber<T>
     private void HeapifyUp()
     {
         var i = Size - 1;
-        while (i > 0 && !HasPriority(GetParent(i), _list[i]))
+        while (i > 0 && !HasPriority(GetParent(i), _values[i]))
         {
             var p = GetParentIndex(i);
             Swap(i, p);
@@ -105,15 +106,15 @@ public abstract class Heap<T> where T : INumber<T>
 
     protected abstract bool HasPriority(T value1, T value2);
 
-    public T Peek()
+    public override T Peek()
     {
         if (IsEmpty)
             throw new InvalidOperationException("Cannot peek an empty heap.");
 
-        return _list[0];
+        return _values[0];
     }
 
-    public T Pop()
+    public override T Pop()
     {
         if (IsEmpty)
             throw new InvalidOperationException("Cannot pop from an empty heap.");
@@ -121,17 +122,17 @@ public abstract class Heap<T> where T : INumber<T>
         var root = Peek();
 
         // set last as root
-        _list[0] = _list[Size - 1];
-        _list.RemoveAt(Size - 1);
+        _values[0] = _values[Size - 1];
+        _values.RemoveAt(Size - 1);
 
         HeapifyDown(0);
 
         return root;
     }
 
-    public void Push(T value)
+    public override void Push(T value)
     {
-        _list.Add(value);
+        _values.Add(value);
         HeapifyUp();
     }
 }
